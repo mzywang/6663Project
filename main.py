@@ -10,7 +10,7 @@ import scipy.optimize
 x_0 = rosenbrook_start(2)
 
 x, f_x = line_search(
-    meth = fr_cg,
+    meth = pr_cg,
     x_0 = x_0,
     f = rosenbrook_obj,
     fprime = rosenbrook_grad,
@@ -18,4 +18,5 @@ x, f_x = line_search(
     epsilon = 10 ** -6,
     DEBUG = True
 )
+
 print("Found Solution x = {} after {} iterations with f(x) = {}.".format(x[-1], len(x) - 1, f_x[-1]))

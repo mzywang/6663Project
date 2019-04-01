@@ -12,8 +12,10 @@ def gradient_progress(f_x, grad):
     return np.linalg.norm(grad[-1]) / (np.linalg.norm(grad[0]) + 1)
 
 def get_step_size(f, fprime, x, d):
-    ret_vals = sp.optimize.line_search(f = f, myfprime = fprime, xk = x, pk = d, amax=1)
+    ret_vals = sp.optimize.line_search(f = f, myfprime = fprime, xk = x, pk = d, amax=1, maxiter=2)
     alpha = ret_vals[0]
+    if alpha is None:
+        alpha = 10**-9
     return alpha
 
 def sd(d, grad, grad_next):

@@ -1,6 +1,8 @@
 import numpy as np
 from profilehooks import profile
 import matplotlib.pyplot
+import scipy as sp
+import scipy.optimize
 
 def rosenbrook_start(n):
     if n % 2 != 0:
@@ -40,18 +42,11 @@ def rosenbrook_obj(x):
         return []
     else:
         f_x = 0
-
         for i in range(n // 2):
             i1 = 2 * i
             i2 = 2 * i + 1
-            f_x += (
-                100 * (x[i1] ** 4)
-                + (x[i1] ** 2)
-                - 200 * x[i2] * (x[i1] ** 2)
-                - 2 * x[i1] +
-                + 100 * (x[i2] ** 2)
-                + 1
-                )
+            f_x += (10 * (x[i2] - (x[i1] ** 2))) ** 2
+            f_x += (1 - x[i1]) ** 2
         return f_x
 
 def rosenbrook_grad(x):
@@ -60,22 +55,7 @@ def rosenbrook_grad(x):
         print("n must be a multiple of 2")
         return []
     else:
-        g = np.array([0.0 for i in range(n)])
-
-        for i in range(n // 2):
-            i1 = 2 * i
-            i2 = 2 * i + 1
-
-            g[i1] = (
-                400 * (x[i1] ** 3)
-                + 2 * x[i1]
-                - 400 * x[i2] * x[i1]
-                - 2
-            )
-            g[i2] = (
-                - 200 * (x[i1] ** 2)
-                + 200 * x[i2]
-            )
+        g = sp.optimize.approx_fprime(x, rosenbrook_obj, 10**-6)
         return g
 
 def rosenbrook_hess(x):
